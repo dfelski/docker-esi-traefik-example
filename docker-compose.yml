@@ -1,0 +1,28 @@
+version: '3'
+
+services:
+
+  reverse-proxy:
+    image: traefik # The official Traefik docker image
+    command: --api --docker # Enables the web UI and tells Traefik to listen to docker
+    ports:
+      - "8080:8080" # The Web UI (enabled by --api)
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock # So that Traefik can listen to the Docker events
+
+  varnish:
+    build: ./varnish
+    ports:
+      - 80:80
+
+  frontend-a:
+    hostname: frontend-a
+    build: ./frontend-a
+    labels:
+      - "traefik.frontend.rule=Host:a.localhost"
+
+  frontend-b:
+    hostname: frontend-b
+    build: ./frontend-b
+    labels:
+      - "traefik.frontend.rule=Host:b.localhost"
