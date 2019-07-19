@@ -19,7 +19,7 @@ services:
     hostname: frontend-a
     build: ./frontend-a
     labels:
-      - "traefik.frontend.rule=Host:a.localhost"
+      - "traefik.frontend.rule=PathPrefixStrip:/a"
 
   frontend-b:
     hostname: frontend-b
